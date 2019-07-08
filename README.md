@@ -14,7 +14,7 @@ There are two competing package managers for node, the [Node Package Manager (np
 
 Once you have node and npm installed (you can verify they are both installed by runnin `npm --version` and `node --version` from the command line) you can setup your repository as a node project. Npm has an excellent built in system for setting up a new project and creating all the boilerplate files necessary. Run the following command and you'll answer a few questions to setup your system.
 
-```
+```bash
 npm init
 ```
 
@@ -53,7 +53,7 @@ This is beneficial because it means we can write, execute, and test the code fro
 
 Jest is made up of two pieces wrapped into a single installation: (1) the framework of functions which are used for testing and (2) a CLI tool for running the tests (and performing other functions). In order to register that our code requires Jest to perform testing we need to list it as a dependency in the package.json file. Luckly npm has a built in system for installing a dependency and letting the package.json file know that it needs to be registered as a new dependency.
 
-```
+```bash
 npm install --save-dev jest
 ```
 
@@ -61,7 +61,7 @@ The `npm install` portion tells npm to install the new package while the `--save
 
 This will tell other developers who want to use our code as well as automated systems what dependencies are required to run our code, but this doesn't give us easy access to the Jest CLI. In order to get that we will install Jest globally to our system, which will register the Jest CLI as a command in our terminal and allow us to run it more easily.
 
-```
+```bash
 npm install --global jest
 ```
 
@@ -79,7 +79,7 @@ test("introduce hannah", function() {
 });
 ```
 
-Note that here we are checking that the string returned by the function and our string literal are equal. There are lots of different types of matching functions that you can use depending on your type and what you need check it against. You should refence [the official documentation on Jest matches](https://jestjs.io/docs/en/using-matchers) when you are trying to check something new to make sure you are checking it as efficiently and directly as possible. 
+> Note: here we are checking that the string returned by the function and our string literal are equal. There are lots of different types of matching functions that you can use depending on your type and what you need check it against. You should refence [the official documentation on Jest matches](https://jestjs.io/docs/en/using-matchers) when you are trying to check something new to make sure you are checking it as efficiently and directly as possible. 
 
 Now we can execute our tests and see if they have found any errors. Simply run `jest` from the command line and it should begin the execution showing you something like this.
 
@@ -89,5 +89,14 @@ However, because npm tries to cover everything you would need to build, test, an
 
 ## Setting up Continuous Integration (CI)
 
-Continuous integration is the process of re-executing a suite of tests whenever certain events occur, typically when new commits are added to the codebase or a new PR is opened against a specific branch.
+Continuous integration is the process of re-executing a suite of tests, typically using an automated system, whenever certain events occur. Often it is setup to run when new commits are added to the codebase or a new PR is opened against a specific branch. We are going to utilize [Travis CI](https://travis-ci.com) for our continuous integraiton since they have a basic plan which can be used for any public repository on GitHub. Start by going to their website and signing in using your GitHub credentials. From there you can set which repositories are monitored for continuous integreation in the settings, however even if you have all repositores enabled only those with a special `.travis.yml` file will actually be run by Travis CI. Create the following file named `.travis.yml` in the root directory of your project, and make sure Travis CI is monitoring the repo you are using for this lab.
 
+```yaml
+language: node_js
+node_js:
+  - "6.9"
+```
+
+Save this file then commit and push it to your master branch. This is the file that Travis CI looks for to know what to do for each repository, and it is highly customizable to allow for many different types of processes to be automated. The file we have written here simply tells Travis CI that our project is a node project and it requires node version 6.9 or newer, and from there it will perform its default behavior which is to run `npm install` followed by `npm test` and will report if there are any issues (this is one of those cases where following convention makes your life easier).
+
+Go to your Tavis CI dashboard and you should see a green (or yellow but soon to be green) checkmark next to the name of your repository. Click on that and you'll be able to view the logs of the test, which show everything that is output when it performs the testing and the first place you should look if there is an error to find out what it is. Continuous integration isn't a replacement for running your test suite before you commit your code to the repository, but it acts as a nice double check that all tests pass before merging code into master and can be used as a basis to start other automated processes such as automated deployments.
