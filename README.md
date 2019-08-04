@@ -90,7 +90,7 @@ test("introduce hannah", function() {
 
 Now we can execute our tests and see if they have found any errors. Simply run `jest` from the command line and it should begin the execution showing you something like this.
 
-![npm test output showing all tests have passed]()
+![npm test output showing all tests have passed](https://raw.githubusercontent.com/cs100/template-lab-js-unit-testing/master/images/testing-success.png)
 
 However, because npm tries to cover everything you would need to build, test, and deploy node applications we can also perform our testing using npm. Run the command `npm test` from the command line and you should see the same tests run as  you did when you executed `jest`. This happens because during the setup process for our node application we wrote "jest" as the test command, which means when you run `npm test` then npm is actually executing `jest` itself. Using npm to abstract away the built, test, and deployment portions of your application allows you to use any libraries or frameworks you like and have a consistent method for performing those functions. This convention not only makes it easier for you and other devleopers to download and build, test, deploy others code but is also widely used in automated systems to integrate with your code.
 
@@ -108,7 +108,7 @@ test('introduce nobody', function() {
 
 Once you've added this test to the `introduction.test.js` file re-run the test suite using `npm` and you should see output like the following
 
-![npm test output showing that one test has failed]()
+![npm test output showing that one test has failed](https://raw.githubusercontent.com/cs100/template-lab-js-unit-testing/master/images/testing-failure.png)
 
 As you can see from the printed "Expected" vs. "Recieved" values that are printed by Jest this is because the function adds a space at the end before appending the name, but that space wasn't present in the expected value. Rather than simply change the expected value lets change the funcitonality to not include the space when there isn't a name (seems like a reasonable thing to do with this edge case). Modify your `introduction` function to be the following.
 
