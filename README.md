@@ -4,6 +4,8 @@
 
 [Jest](https://jestjs.io) is one of the most popular JavaScript testing frameworks which aims to be simple to use while still covering a wide number of testing types and working with a large number of frameworks. It works with JavaScript like systems such as Babel and TypeScript as well as a large number of UI frameworks such as React, Angular, and Vue.
 
+> Note: for this lab we will have notes reminding your to commit and push your code to GitHub to get you in the habit of committing and pushing often and to illustrate good times in your development to commit your code.
+
 ## Getting Started with Node
 
 [Node](https://nodejs.org/en/) is a JavaScript runtime which allows for the execution of JavaScript code directly rather than needing to use a browser to execute it. This ability has taken javasript from being a front-end only language to being something that can be used full-stack. Jest has been designed to run on top of node to allow for local (and non-local) testing of your javscript code, which means in order to use jest we'll also need to use node and one of its package managers.
@@ -32,6 +34,8 @@ Below are the questions you will be asked. For most of them you can leave them a
 
 It will then print out the `package.json` file which will be generated and ask you to confirm. Read through the package file and double check that the test command is correct before confirming.
 
+> Note: commit and push the work you have done so far to GitHub, primarily your `package.json` file.
+
 ## JavaScript for Testing
 
 Now that we have node setup we can execute JavaScript code directly without the need for the browser. Lets create a basic JavaScript function which we could execute with node in a file named `introduction.js`.
@@ -47,6 +51,8 @@ module.exports = introduction;
 This is beneficial because it means we can write, execute, and test the code from our system without having to develop HTML code that calls the JavaScript functions and then click those UI elements and hand validate that the functions work correctly. This type of bespoke testing is easy to forget to do, doesn't scale to larger projects, and can lead to regressions if we don't test everything every time we make a change to the code.
 
 If we created a file named `main.js` which just called `console.log(introduction('hannah'))` and then executed that with node by running `node main.js` we would see the string "hello my name is hannah" printed out to the terminal. However, this would be a poor form of testing because it doesn't validate if the output value is correct or not (along with some other shortcomings). The validation is where our unit testing framework will come in, but its usually easiest to validate types which are (or we can extract from) basic types. There are ways to gracefully handle validating more complex systems which we will discuss at the end of this lab for the Jest unit testing framework, but these options do not exist across all unit testing frameworks and when they do exist can be done very differently, so its alway bes to consult your documentation.
+
+> Note: commit and push the work you have done so far to GitHub.
 
 ## Installing Jest
 
@@ -66,7 +72,9 @@ npm install --global jest
 
 Now you should be able to type `jest --version` and see a versio number output. If you don't see a version output and instead get an error like "command not found" try closing all your command line programs and opening a new one.
 
-## Writing Basic Jest Tests
+> Note: commit and push the work you have done so far to GitHub, including your updated `package.json` and `package-lock.json` files.
+
+## Writing a Basic Jest Test
 
 With most testing frameworks groups of tests are collected into sets and typically all tests in a set are testing the same library or module, and are typically grouped together in reporting to make it easier to identify where an error occured. In Jest, all tests in the same file are automatically put into a set and reported together, and typically a set covers all the code in a single file (which will also be a single module if you are following good coding practices). Because of this, it is idiomatic to name your test files `<filename-under-test>.test.js` replacing `<filename-under-test>` with the name of the file you will be testing. Jest looks for files named this way to run, so as long as they are named `*.test.js` Jest should be able to automatically identify and run them. Create the below tests for the code we wrote previously.
 
@@ -82,9 +90,42 @@ test("introduce hannah", function() {
 
 Now we can execute our tests and see if they have found any errors. Simply run `jest` from the command line and it should begin the execution showing you something like this.
 
-![npm test output showing all tests have passed](https://raw.githubusercontent.com/cs100/template-lab-js-unit-testing/master/images/testing-results.png?token=ABZFRYFZ4ZYRH6APKHGBNOS5FPEAK)
+![npm test output showing all tests have passed]()
 
 However, because npm tries to cover everything you would need to build, test, and deploy node applications we can also perform our testing using npm. Run the command `npm test` from the command line and you should see the same tests run as  you did when you executed `jest`. This happens because during the setup process for our node application we wrote "jest" as the test command, which means when you run `npm test` then npm is actually executing `jest` itself. Using npm to abstract away the built, test, and deployment portions of your application allows you to use any libraries or frameworks you like and have a consistent method for performing those functions. This convention not only makes it easier for you and other devleopers to download and build, test, deploy others code but is also widely used in automated systems to integrate with your code.
+
+> Note: commit and push the work you have done so far to GitHub.
+
+## Failing a Jest Test
+
+Now that we've written a basic Jest test and seen our function pass it, lets write a test for an edge case. This test will check the output of the function when an empty string is passed as input.
+
+```js
+test('introduce nobody', function() {
+    expect(introduction("")).toBe("hello my name is");
+});
+```
+
+Once you've added this test to the `introduction.test.js` file re-run the test suite using `npm` and you should see output like the following
+
+![npm test output showing that one test has failed]()
+
+As you can see from the printed "Expected" vs. "Recieved" values that are printed by Jest this is because the function adds a space at the end before appending the name, but that space wasn't present in the expected value. Rather than simply change the expected value lets change the funcitonality to not include the space when there isn't a name (seems like a reasonable thing to do with this edge case). Modify your `introduction` function to be the following.
+
+```js
+function introduction(name) {
+    if(name.length > 0) {
+        return "hello my name is " + name;
+    }
+    else {
+        return "hello my name is";
+    }
+}
+```
+
+Now re-run your tests and you should see that they both are passing.
+
+> Note: commit and push the work you have done so far to GitHub.
 
 ## Setting up Continuous Integration (CI)
 
