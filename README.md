@@ -44,10 +44,9 @@ function introduction(name) {
 module.exports = introduction;
 ```
 
-If we created a file named `main.js` which just called `console.log(introduction('hannah'))` and then executed that with node by running `node main.js` we would see the string "hello my name is hannah" printed out to the terminal. However, this would be a poor form of testing because it doesn't validate if the output value is correct or not (along with some other shortcomings). The validation is where
-
-
 This is beneficial because it means we can write, execute, and test the code from our system without having to develop HTML code that calls the JavaScript functions and then click those UI elements and hand validate that the functions work correctly. This type of bespoke testing is easy to forget to do, doesn't scale to larger projects, and can lead to regressions if we don't test everything every time we make a change to the code.
+
+If we created a file named `main.js` which just called `console.log(introduction('hannah'))` and then executed that with node by running `node main.js` we would see the string "hello my name is hannah" printed out to the terminal. However, this would be a poor form of testing because it doesn't validate if the output value is correct or not (along with some other shortcomings). The validation is where our unit testing framework will come in, but its usually easiest to validate types which are (or we can extract from) basic types. There are ways to gracefully handle validating more complex systems which we will discuss at the end of this lab for the Jest unit testing framework, but these options do not exist across all unit testing frameworks and when they do exist can be done very differently, so its alway bes to consult your documentation.
 
 ## Installing Jest
 
@@ -89,7 +88,9 @@ However, because npm tries to cover everything you would need to build, test, an
 
 ## Setting up Continuous Integration (CI)
 
-Continuous integration is the process of re-executing a suite of tests, typically using an automated system, whenever certain events occur. Often it is setup to run when new commits are added to the codebase or a new PR is opened against a specific branch. We are going to utilize [Travis CI](https://travis-ci.com) for our continuous integraiton since they have a basic plan which can be used for any public repository on GitHub. Start by going to their website and signing in using your GitHub credentials. From there you can set which repositories are monitored for continuous integreation in the settings, however even if you have all repositores enabled only those with a special `.travis.yml` file will actually be run by Travis CI. Create the following file named `.travis.yml` in the root directory of your project, and make sure Travis CI is monitoring the repo you are using for this lab.
+Continuous integration is the process of re-executing a suite of tests, typically using an automated system, whenever certain events occur. Often it is setup to run when new commits are added to the codebase or a new PR is opened against a specific branch. We are going to utilize [Travis CI](https://travis-ci.com) for our continuous integrtion. Travis CI integrates with GitHub's checks system allowing it to display its status directly on a GitHub PR and can be used to gate PRs from beging merged until Travis has completed successfully. Travis, and other CI services, provide their (very valuable) service for free to public GitHub repoitories but we will be using Travis specifically because you also get free private CI as part of the GitHub Student Pack.
+
+Start by going to their website and signing in using your GitHub credentials. From there you can set which repositories are monitored for continuous integreation in the settings, however even if you have all repositores enabled only those with a special `.travis.yml` file will actually be run by Travis CI. Create the following file named `.travis.yml` in the root directory of your project, and make sure Travis CI is monitoring the repo you are using for this lab.
 
 ```yaml
 language: node_js
@@ -100,3 +101,13 @@ node_js:
 Save this file then commit and push it to your master branch. This is the file that Travis CI looks for to know what to do for each repository, and it is highly customizable to allow for many different types of processes to be automated. The file we have written here simply tells Travis CI that our project is a node project and it requires node version 6.9 or newer, and from there it will perform its default behavior which is to run `npm install` followed by `npm test` and will report if there are any issues (this is one of those cases where following convention makes your life easier).
 
 Go to your Tavis CI dashboard and you should see a green (or yellow but soon to be green) checkmark next to the name of your repository. Click on that and you'll be able to view the logs of the test, which show everything that is output when it performs the testing and the first place you should look if there is an error to find out what it is. Continuous integration isn't a replacement for running your test suite before you commit your code to the repository, but it acts as a nice double check that all tests pass before merging code into master and can be used as a basis to start other automated processes such as automated deployments.
+
+# Intermediate and Advanced Jest Usage
+
+* Specialized matchers for various data types which can vastly reduce the complexity of the validation when used correctly [Jest Docs](https://jestjs.io/docs/en/using-matchers)
+* Built-in ability to use mocks to capture the vast majority of calls, returns, initializations, allocations, etc. to systems that haven't been developed or are easier to test externally [Jest Docs](https://jestjs.io/docs/en/mock-functions)
+* The `.each()` function allows a single test run a number of different inputs against a templated testing function without having to copy-paste that test [Zetcode Tutorial](http://zetcode.com/javascript/jest/)
+* Setup and teardown code using `beforeAll()`, `beforeEach()`, etc. to execute some code before any/each tests is run, good when complex initializations are needed for a set of tests [Jest Docs](https://jestjs.io/docs/en/setup-teardown)
+* The `describe()` function makes it easy to group similar tests together making the jest testing output easier to read and understand and to manage scopes [Jest Docs](https://jestjs.io/docs/en/setup-teardown#scoping)
+* Test asynchronous code with specialized methods for callbacks, promises, and async/await methods [Jest Docs](https://jestjs.io/docs/en/asynchronous.html)
+
