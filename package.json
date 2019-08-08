@@ -1,0 +1,22 @@
+{
+  "name": "template-lab-js-unit-testing",
+  "version": "1.0.0",
+  "description": "> Author(s): Brian Crites ([@brrcrites](https://github.com/brrcrites))",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/szhan135/template-lab-js-unit-testing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/szhan135/template-lab-js-unit-testing/issues"
+  },
+  "homepage": "https://github.com/szhan135/template-lab-js-unit-testing#readme",
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}
